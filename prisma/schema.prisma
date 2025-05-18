@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cargo {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  funcionarios Funcionario[]
+}
+
+model Setor {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  funcionarios Funcionario[]
+}
+
+model Funcionario {
+  id        Int    @id @default(autoincrement())
+  nome      String
+  cpf       String @unique
+  email     String @unique
+  salario   Float
+  cargoId   Int
+  setorId   Int
+
+  cargo     Cargo @relation(fields: [cargoId], references: [id])
+  setor     Setor @relation(fields: [setorId], references: [id])
+}

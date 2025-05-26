@@ -1,52 +1,89 @@
-import { useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { useState, type FormEvent } from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useAuth } from '../context/AuthContext';
+import api from '../api/axios';
+import { motion } from "framer-motion";
 
 export default function LoginCadastro() {
-  const [loginData, setLoginData] = useState({ email: '', senha: '' });
-  const [cadastroData, setCadastroData] = useState({ nome: '', email: '', senha: '' });
+  const { login } = useAuth();
+  const [erro, setErro] = useState('');
+  const [form, setForm] = useState({
+    nome: '',
+    email: '',
+    senha: '',
+    perfil: 'ADMIN',
+  });
 
-  const handleLogin = () => {
-    console.log('Login com:', loginData);
-    // TODO: Integrar com API de login
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleCadastro = () => {
-    console.log('Cadastro com:', cadastroData);
-    // TODO: Integrar com API de cadastro
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await api.post('/auth/login', {
+        email: form.email,
+        senha: form.senha,
+      });
+      login(res.data.token);
+      window.location.href = '/dashboard';
+    } catch (err) {
+      setErro('Usuário ou senha inválidos');
+    }
+  };
+
+  const handleCadastro = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.post('/auth/registrar', form);
+      alert('Cadastro realizado com sucesso!');
+    } catch (err) {
+      setErro('Erro ao cadastrar usuário');
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 p-4">
-      <Card className="w-full max-w-md shadow-2xl rounded-2xl">
-        <CardContent className="p-6">
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid grid-cols-2 bg-blue-50 rounded-xl mb-6">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="cadastro">Cadastro</TabsTrigger>
-            </TabsList>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-900 to-gray-800 p-4">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md"
+      >
+        <Card className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl rounded-2xl overflow-hidden">
+          <CardContent className="py-10 px-8">
+            <h1 className="text-4xl font-extrabold text-white text-center mb-8 tracking-tight">Painel RH</h1>
+            <Tabs defaultValue="login" className="w-full">
+              <TabsList className="grid grid-cols-2 mb-6 bg-white/10 rounded-xl text-white">
+                <TabsTrigger value="login">Entrar</TabsTrigger>
+                <TabsTrigger value="cadastro">Cadastrar</TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="login">
-              <form onSubmit={e => { e.preventDefault(); handleLogin(); }} className="space-y-4">
-                <Input type="email" placeholder="E-mail" value={loginData.email} onChange={e => setLoginData({ ...loginData, email: e.target.value })} required />
-                <Input type="password" placeholder="Senha" value={loginData.senha} onChange={e => setLoginData({ ...loginData, senha: e.target.value })} required />
-                <Button className="w-full" type="submit">Entrar</Button>
-              </form>
-            </TabsContent>
+              <TabsContent value="login">
+                <form onSubmit={handleLogin} className="space-y-4">
+                  {erro && <p className="text-red-400 text-sm text-center">{erro}</p>}
+                  <Input name="email" placeholder="E-mail" onChange={handleChange} required className="bg-white/20 text-white placeholder:text-white/70 border-white/30" />
+                  <Input name="senha" type="password" placeholder="Senha" onChange={handleChange} required className="bg-white/20 text-white placeholder:text-white/70 border-white/30" />
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700 transition-colors" type="submit">Entrar</Button>
+                </form>
+              </TabsContent>
 
-            <TabsContent value="cadastro">
-              <form onSubmit={e => { e.preventDefault(); handleCadastro(); }} className="space-y-4">
-                <Input type="text" placeholder="Nome completo" value={cadastroData.nome} onChange={e => setCadastroData({ ...cadastroData, nome: e.target.value })} required />
-                <Input type="email" placeholder="E-mail" value={cadastroData.email} onChange={e => setCadastroData({ ...cadastroData, email: e.target.value })} required />
-                <Input type="password" placeholder="Senha" value={cadastroData.senha} onChange={e => setCadastroData({ ...cadastroData, senha: e.target.value })} required />
-                <Button className="w-full" type="submit">Cadastrar</Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+              <TabsContent value="cadastro">
+                <form onSubmit={handleCadastro} className="space-y-4">
+                  {erro && <p className="text-red-400 text-sm text-center">{erro}</p>}
+                  <Input name="nome" placeholder="Nome completo" onChange={handleChange} required className="bg-white/20 text-white placeholder:text-white/70 border-white/30" />
+                  <Input name="email" placeholder="E-mail" onChange={handleChange} required className="bg-white/20 text-white placeholder:text-white/70 border-white/30" />
+                  <Input name="senha" type="password" placeholder="Senha" onChange={handleChange} required className="bg-white/20 text-white placeholder:text-white/70 border-white/30" />
+                  <Button className="w-full bg-green-600 hover:bg-green-700 transition-colors" type="submit">Cadastrar</Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   );
 }

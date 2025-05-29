@@ -1,25 +1,20 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
 interface AuthContextType {
   token: string | null;
   login: (token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
-  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true); // <- novo
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-    setLoading(false); // <- marca carregamento como concluído
+    if (storedToken) setToken(storedToken);
   }, []);
 
   const login = (newToken: string) => {
@@ -34,7 +29,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, login, logout, isAuthenticated: !!token, loading }}
+      value={{ token, login, logout, isAuthenticated: !!token }}
     >
       {children}
     </AuthContext.Provider>

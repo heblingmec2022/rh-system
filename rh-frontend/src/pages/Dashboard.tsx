@@ -1,10 +1,8 @@
-const Dashboard = () => {
+export default function Dashboard() {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Bem-vindo ao Painel RH!</h1>
-      <p className="text-lg">Você está logado com sucesso 🚀</p>
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-green-800 to-gray-900 text-white">
+      <h1 className="text-4xl font-bold">Bem-vindo ao Painel RH!</h1>
     </div>
   );
-};
+}
 
-export default Dashboard;

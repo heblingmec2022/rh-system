@@ -1,37 +1,22 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginCadastro from './pages/LoginCadastro';
-import Dashboard from './pages/Dashboard';
-import CadastrarFuncionario from './pages/CadastrarFuncionario';
-import PrivateRoute from './routes/PrivateRoute';
+import Dashboard from './pages/Dashboard'; // Crie essa página se ainda não tiver
+import { AuthProvider } from './context/AuthContext';
 
-
-function App() {
+export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginCadastro />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/cadastrar"
-          element={
-            <PrivateRoute>
-              <CadastrarFuncionario />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LoginCadastro />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
-export default App;
+
 
 
 

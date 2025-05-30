@@ -1,20 +1,24 @@
+// src/App.tsx
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginCadastro from './pages/LoginCadastro';
-import Dashboard from './pages/Dashboard'; // Crie essa página se ainda não tiver
-import { AuthProvider } from './context/AuthContext';
+import Dashboard from './pages/Dashboard';
+import PrivateRoute from './routes/PrivateRoute';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoginCadastro />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginCadastro />} />
+        <Route path="/dashboard" element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        } />
+      </Routes>
+    </BrowserRouter>
   );
 }
+
 
 
 

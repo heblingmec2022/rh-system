@@ -7,9 +7,8 @@ interface PrivateRouteProps {
   children: ReactNode;
 }
 
-export default function PrivateRoute({ children }: PrivateRouteProps) {
+export default function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
-
   return isAuthenticated ? children : <Navigate to="/" />;
 }
 

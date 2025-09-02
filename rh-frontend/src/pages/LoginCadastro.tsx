@@ -52,6 +52,7 @@ export default function LoginCadastro() {
         <CardContent className="py-6">
           <h1 className="text-center text-3xl font-bold text-white mb-2">Painel RH</h1>
           <h2 className="text-center text-white text-sm mb-6">Secretaria da Casa Civil</h2>
+          <h2 className="text-center text-white text-sm mb-6">Subchefia Administrativa</h2>
           <h3 className="text-center text-white text-xs mb-4">Departamento de Tecnologia da Informação e Comunicação</h3>
 
           <Tabs defaultValue="login" className="w-full">

@@ -31,7 +31,7 @@ export default function LoginCadastro() {
       });
       login(res.data.token);
       navigate('/dashboard');
-    } catch (err) {
+    } catch {
       setErro('Usuário ou senha inválidos');
     }
   };
@@ -41,7 +41,7 @@ export default function LoginCadastro() {
     try {
       await api.post('/auth/registrar', form);
       alert('Cadastro realizado com sucesso!');
-    } catch (err) {
+    } catch {
       setErro('Erro ao cadastrar usuário');
     }
   };

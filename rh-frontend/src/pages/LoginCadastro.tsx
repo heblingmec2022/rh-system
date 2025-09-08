@@ -49,9 +49,8 @@ export default function LoginCadastro() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-950 p-4">
       <Card className="w-full max-w-md shadow-2xl rounded-2xl bg-white/10 backdrop-blur-md">
-        <CardContent className="py-6">
-          <h1 className="text-center text-3xl font-bold text-white mb-2">Painel RH</h1>
-          <h2 className="text-center text-white text-sm mb-6">Sistema de Cadastramento de Funcionários</h2>
+        <CardContent className="py-5">
+          <h1 className="text-center text-white text-sm mb-2">Sistema de Cadastramento de Funcionários</h1>
           <h2 className="text-center text-white text-sm mb-6">RH-Center</h2>
           <h3 className="text-center text-white text-xs mb-4">Desenvolvido por HeblingDev</h3>
 
